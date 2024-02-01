@@ -1,31 +1,32 @@
 package strategies
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/neidersalgado/rateLimit/pkg/logger"
 	"sync"
 	"time"
 )
 
-// userLimitState mantiene el estado de límite de tasa para cada usuario
-type userLimitState struct {
-	lastNotification  time.Time // La última vez que se envió una notificación
-	notificationCount int       // Cuántas notificaciones se han enviado en el período actual
+type MarketingNotificationStrategy struct {
+	limit      int
+	period     time.Duration
+	mutex      sync.RWMutex
+	repository Repository
+	logg       *logger.ZapLogger
 }
 
-type StatusNotificationStrategy struct {
-	limit     int
-	period    time.Duration
-	userState map[string]*userLimitState
-	mutex     sync.RWMutex
-}
-
-func NewStatusNotificationStrategy(limit int, period time.Duration) *StatusNotificationStrategy {
-	return &StatusNotificationStrategy{
-		limit:     limit,
-		period:    period,
-		userState: make(map[string]*userLimitState),
+func NewMarketingNotificationStrategy(c *gin.Context, limit int, period time.Duration, repo Repository) *MarketingNotificationStrategy {
+	logger, _ := logger.GetLoggerFromContext(c)
+	return &MarketingNotificationStrategy{
+		limit:      limit,
+		period:     period,
+		repository: repo,
+		logg:       logger,
 	}
 }
 
-func (s *StatusNotificationStrategy) CheckLimitAndSend(userIDstatus.go string) bool {
+func (s *MarketingNotificationStrategy) CheckLimitAndSend(userID string) bool {
+	s.logg.Info("Check Limit Marketing")
+
 	return true
 }
