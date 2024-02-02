@@ -70,7 +70,7 @@ func TestNotificationHandler_HandleNotification(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			router := gin.Default()
+			router := gin.New()
 
 			mockService := mocks.NotificationServiceMock{
 				SendNotificationFunc: tc.mockSendNotification,

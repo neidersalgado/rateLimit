@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	customErr "github.com/neidersalgado/rateLimit/internal/error"
 	"github.com/neidersalgado/rateLimit/internal/request"
-	"github.com/neidersalgado/rateLimit/pkg/logger"
 	"net/http"
 )
 
@@ -22,12 +21,7 @@ func NewNotificationHandler(srv Service) *NotificationHandler {
 
 // HandleNotification maneja la solicitud POST para el endpoint de notificaciones
 func (h *NotificationHandler) HandleNotification(c *gin.Context) {
-	logger, ok := logger.GetLoggerFromContext(c)
-	if !ok {
-		return // El error ya se manejó dentro de GetLoggerFromContext
-	}
 	var req request.NotificationRequest
-	logger.Info("Processing notification request")
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return

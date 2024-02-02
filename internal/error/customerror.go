@@ -32,9 +32,9 @@ func NewInvalidRequest(msg string, inner error) *CustomError {
 
 func (e *CustomError) Error() string {
 	if e.Inner != nil {
-		return fmt.Sprintf("[%s] %s: %s", e.Type, e.Message, e.Inner.Error())
+		return fmt.Sprintf("[%d] %s: %s", int(e.Type), e.Message, e.Inner.Error())
 	}
-	return fmt.Sprintf("[%s] %s", e.Type, e.Message)
+	return fmt.Sprintf("[%d] %s", int(e.Type), e.Message)
 }
 
 func (e *CustomError) Unwrap() error {

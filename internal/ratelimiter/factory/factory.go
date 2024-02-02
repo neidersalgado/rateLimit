@@ -2,10 +2,9 @@ package factory
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/neidersalgado/rateLimit/internal/ratelimiter/strategies"
 	"github.com/neidersalgado/rateLimit/internal/repository"
-	"github.com/neidersalgado/rateLimit/pkg/logger"
+	"github.com/neidersalgado/rateLimit/pkg/timeUtil"
 	"time"
 )
 
@@ -19,18 +18,15 @@ type Repository interface {
 	UpdateUserLimit(userID string, notificationType string, newLimit repository.Limit)
 }
 
-func CreateNotificationStrategy(ctx *gin.Context, notificationType string, repo Repository) (NotificationStrategy, error) {
-	logger, _ := logger.GetLoggerFromContext(ctx)
+func CreateNotificationStrategy(notificationType string, repo Repository) (NotificationStrategy, error) {
+	timeProvider := &timeUtil.DefaultTimeProvider{}
 	switch notificationType {
 	case "Status":
-		logger.Info("Build Statu Strategy")
-		return strategies.NewStatusNotificationStrategy(ctx, 2, 1*time.Minute, repo), nil
+		return strategies.NewStatusNotificationStrategy(2, 1*time.Minute, repo, timeProvider), nil
 	case "News":
-		logger.Info("Build News Strategy")
-		return strategies.NewNewsNotificationStrategy(ctx, 2, 1*time.Hour, repo), nil
+		return strategies.NewNewsNotificationStrategy(2, 1*time.Hour, repo, timeProvider), nil
 	case "Marketing":
-		logger.Info("Build Marketing Strategy")
-		return strategies.NewMarketingNotificationStrategy(ctx, 2, time.Hour*24*30, repo), nil
+		return strategies.NewMarketingNotificationStrategy(2, time.Hour*24*30, repo, timeProvider), nil
 	default:
 		return nil, fmt.Errorf("not Valid Notification Type")
 	}

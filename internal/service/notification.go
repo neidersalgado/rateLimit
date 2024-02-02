@@ -6,7 +6,6 @@ import (
 	custErr "github.com/neidersalgado/rateLimit/internal/error"
 	"github.com/neidersalgado/rateLimit/internal/ratelimiter/factory"
 	"github.com/neidersalgado/rateLimit/internal/repository"
-	"github.com/neidersalgado/rateLimit/pkg/logger"
 )
 
 type Strategy interface {
@@ -27,9 +26,7 @@ func NewNotificationService(repo Repository) *NotificationService {
 }
 
 func (s *NotificationService) SendNotification(ctx *gin.Context, notificationType, userID, message string) error {
-	logger, _ := logger.GetLoggerFromContext(ctx)
-	logger.Debug("Send Notification Service")
-	NotificationStrategy, err := factory.CreateNotificationStrategy(ctx, notificationType, s.Repo)
+	NotificationStrategy, err := factory.CreateNotificationStrategy(notificationType, s.Repo)
 	if err != nil {
 		return custErr.NewInvalidRequest("invalid Notification Type", err)
 	}
