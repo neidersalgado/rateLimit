@@ -24,9 +24,9 @@ func CreateNotificationStrategy(notificationType string, repo Repository) (Notif
 	case "Status":
 		return strategies.NewStatusNotificationStrategy(2, 1*time.Minute, repo, timeProvider), nil
 	case "News":
-		return strategies.NewNewsNotificationStrategy(2, 1*time.Hour, repo, timeProvider), nil
+		return strategies.NewNewsNotificationStrategy(1, 24*time.Hour, repo, timeProvider), nil
 	case "Marketing":
-		return strategies.NewMarketingNotificationStrategy(2, time.Hour*24*30, repo, timeProvider), nil
+		return strategies.NewMarketingNotificationStrategy(3, time.Hour*1, repo, timeProvider), nil
 	default:
 		return nil, fmt.Errorf("not Valid Notification Type")
 	}

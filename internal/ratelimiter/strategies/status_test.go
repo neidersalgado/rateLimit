@@ -13,8 +13,8 @@ import (
 
 func TestStatusNotificationStrategy_CheckLimitAndSend(t *testing.T) {
 	mockTime := time.Date(2022, 1, 1, 12, 0, 0, 0, time.UTC)
-	justBeforeLimit := mockTime.Add(-59 * time.Second)
-	justAfterLimit := mockTime.Add(1 * time.Minute)
+	justBeforeLimit := mockTime.Add(-30 * time.Second) // 30 segundos antes
+	justAfterLimit := mockTime.Add(30 * time.Second)   // 30 segundos después
 
 	testCases := []struct {
 		name              string
