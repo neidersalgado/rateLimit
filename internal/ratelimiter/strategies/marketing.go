@@ -29,21 +29,21 @@ func (s *MarketingNotificationStrategy) CheckLimitAndSend(userID string) bool {
 	defer s.mutex.Unlock()
 	userLimits, exists := s.repository.GetUserLimits(userID)
 	if !exists {
-		s.repository.UpdateUserLimit(userID, "Status", repository.Limit{Count: 1, LastNotification: s.timeProvider.Now()})
+		s.repository.UpdateUserLimit(userID, "Marketing", repository.Limit{Count: 1, LastNotification: s.timeProvider.Now()})
 		return true
 	}
 
-	limit, exists := userLimits["Status"]
+	limit, exists := userLimits["Marketing"]
 	if !exists {
-		s.repository.UpdateUserLimit(userID, "Status", repository.Limit{Count: 1, LastNotification: s.timeProvider.Now()})
+		s.repository.UpdateUserLimit(userID, "Marketing", repository.Limit{Count: 1, LastNotification: s.timeProvider.Now()})
 		return true
 	}
 
 	if time.Since(limit.LastNotification) > s.period {
-		s.repository.UpdateUserLimit(userID, "Status", repository.Limit{Count: 1, LastNotification: s.timeProvider.Now()})
+		s.repository.UpdateUserLimit(userID, "Marketing", repository.Limit{Count: 1, LastNotification: s.timeProvider.Now()})
 		return true
 	} else if limit.Count < s.limit {
-		s.repository.UpdateUserLimit(userID, "Status", repository.Limit{Count: limit.Count + 1, LastNotification: limit.LastNotification})
+		s.repository.UpdateUserLimit(userID, "Marketing", repository.Limit{Count: limit.Count + 1, LastNotification: limit.LastNotification})
 		return true
 	}
 
